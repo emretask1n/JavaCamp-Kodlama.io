@@ -6,8 +6,8 @@ import com.emretaskin.Kodlama.io.Devs.dto.response.ProgrammingLanguageResponse;
 import com.emretaskin.Kodlama.io.Devs.entity.ProgrammingLanguage;
 import com.emretaskin.Kodlama.io.Devs.repository.ProgrammingLanguageRepository;
 import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsProgrammingLanguageExistById;
-import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsProgrammingLanguageExistByIdOrName;
-import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsProgrammingLanguageNameBlank;
+import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsProgrammingLanguageExistByName;
+import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsStringBlank;
 import com.emretaskin.Kodlama.io.Devs.service.interfaces.ProgrammingLanguageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ import java.util.List;
 public class ProgrammingLanguageServiceImpl implements ProgrammingLanguageService {
     private final ProgrammingLanguageRepository programmingLanguageRepository;
     private final IsProgrammingLanguageExistById isProgrammingLanguageExistById;
-    private final IsProgrammingLanguageNameBlank isProgrammingLanguageNameBlank;
-    private final IsProgrammingLanguageExistByIdOrName isProgrammingLanguageExistByIdOrName;
+    private final IsStringBlank isStringBlank;
+    private final IsProgrammingLanguageExistByName isProgrammingLanguageExistByName;
 
     @Override
     public List<ProgrammingLanguageResponse> listAllProgrammingLanguageNames() {
@@ -41,11 +41,10 @@ public class ProgrammingLanguageServiceImpl implements ProgrammingLanguageServic
 
     @Override
     public ProgrammingLanguageResponse createProgrammingLanguage(ProgrammingLanguageRequest programmingLanguageRequest) {
-        isProgrammingLanguageExistByIdOrName.check(programmingLanguageRequest.getId(), programmingLanguageRequest.getName());
+        isProgrammingLanguageExistByName.check(programmingLanguageRequest.getName());
+        isStringBlank.check(programmingLanguageRequest.getName());
 
-        isProgrammingLanguageNameBlank.check(programmingLanguageRequest.getName());
-
-        ProgrammingLanguage programmingLanguage = ProgrammingLanguage.builder().id(programmingLanguageRequest.getId())
+        ProgrammingLanguage programmingLanguage = ProgrammingLanguage.builder()
                 .name(programmingLanguageRequest.getName())
                 .build();
 
@@ -64,16 +63,22 @@ public class ProgrammingLanguageServiceImpl implements ProgrammingLanguageServic
     }
 
     @Override
-    public ProgrammingLanguageResponse updateProgrammingLanguage(ProgrammingLanguageRequest programmingLanguageRequest) {
-        isProgrammingLanguageExistById.check(programmingLanguageRequest.getId());
-        isProgrammingLanguageNameBlank.check(programmingLanguageRequest.getName());
+    public ProgrammingLanguageResponse updateProgrammingLanguage(Long id, ProgrammingLanguageRequest programmingLanguageRequest) {
+        isStringBlank.check(programmingLanguageRequest.getName());
 
-        ProgrammingLanguage programmingLanguage = programmingLanguageRepository.findById(programmingLanguageRequest.getId()).get();
+        ProgrammingLanguage programmingLanguage = programmingLanguageRepository.findById(id).get();
 
         programmingLanguage.setName(programmingLanguageRequest.getName());
 
         programmingLanguageRepository.save(programmingLanguage);
 
         return ProgrammingLanguageResponse.builder().name("Language with id : " + programmingLanguage.getId() + " is updated as " + programmingLanguage.getName()).build();
+    }
+
+    @Override
+    public ProgrammingLanguage findProgrammingLanguageById(Long id) {
+        isProgrammingLanguageExistById.check(id);
+
+        return programmingLanguageRepository.findById(id).get();
     }
 }

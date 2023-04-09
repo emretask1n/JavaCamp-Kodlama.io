@@ -1,10 +1,10 @@
 package com.emretaskin.Kodlama.io.Devs.service.checker.impl;
 
-import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsProgrammingLanguageNameBlank;
+import com.emretaskin.Kodlama.io.Devs.service.checker.interfaces.IsStringBlank;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IsProgrammingLanguageNameBlankImpl implements IsProgrammingLanguageNameBlank {
+public class IsStringBlankImpl implements IsStringBlank {
 
     @Override
     public void check(String name) {

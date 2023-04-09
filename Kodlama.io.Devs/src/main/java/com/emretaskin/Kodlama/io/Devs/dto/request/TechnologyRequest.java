@@ -1,12 +1,11 @@
 package com.emretaskin.Kodlama.io.Devs.dto.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-@AllArgsConstructor
-public class ProgrammingLanguageRequest {
+public class TechnologyRequest {
     private String name;
+    private Long programmingLanguageId;
 }

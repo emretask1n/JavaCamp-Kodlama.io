@@ -38,9 +38,9 @@ public class ProgrammingLanguageController {
         return new ResponseEntity<>(programmingLanguageService.deleteProgrammingLanguageById(id), OK);
     }
 
-    @PutMapping
-    public ResponseEntity<ProgrammingLanguageResponse> updateProgrammingLanguage(@RequestBody ProgrammingLanguageRequest programmingLanguageRequest){
-        return new ResponseEntity<>(programmingLanguageService.updateProgrammingLanguage(programmingLanguageRequest),OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<ProgrammingLanguageResponse> updateProgrammingLanguage(@PathVariable Long id, @RequestBody ProgrammingLanguageRequest programmingLanguageRequest){
+        return new ResponseEntity<>(programmingLanguageService.updateProgrammingLanguage(id ,programmingLanguageRequest),OK);
     }
 
 
